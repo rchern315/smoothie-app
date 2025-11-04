@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"// react-router-dom for routing
 
 // pages
 import Home from "./pages/Home"
@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <nav>
-        <h1>Supa Smoothies</h1>
+        <h1>Supa Smoothies Recipes</h1>
         <Link to="/">Home</Link>
         <Link to="/create">Create New Smoothie</Link>
       </nav>

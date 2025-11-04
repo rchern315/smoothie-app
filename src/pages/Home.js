@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import supabase from "../config/supabaseClient"
 
+//components
+import SmoothieCard from "../components/SmoothieCard"
+
 const Home = () => {
   const [fetchError, setFetchError] = useState(null)
   const [smoothies, setSmoothies] = useState([])
@@ -29,19 +32,19 @@ const Home = () => {
 
   return (
     <div className="page home">
-      {fetchError && <p className="error">{fetchError}</p>}
-
-      {smoothies.length > 0 ? (
+      {fetchError && (<p className="error">{fetchError}</p>)}
+      {smoothies &&(     
+      
         <div className="smoothies">
+          {/* order-by-button*/}
+          <div className="smoothie-grid">
           {smoothies.map((smoothie) => (
-            <p>{smoothie.title}</p>
+            <SmoothieCard key={smoothie.id} smoothie={smoothie} />
           ))}
         </div>
-      ) : (
-        !fetchError && <p>Loading smoothies...</p>
+         </div>
       )}
     </div>
   )
 }
-
-export default Home
+export default Home 
