@@ -6,26 +6,32 @@ const Create = () => {
   const navigate = useNavigate()
 
   const [title, setTitle] = useState('')
-  const [method, setMethod] = useState('')
-  const [rating, setRating] = useState('')
+  const [description, setDescription] = useState('')
+  const [image, setImage] = useState('')
   const [formError, setFormError] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!title || !method || !rating) {
-      setFormError('Please fill in all the fields correctly.')
+    if (!title || !description) {
+      setFormError('Please fill in all the required fields.')
       return
     }
 
     const { data, error } = await supabase
-      .from('recipes')
-      .insert([{ title, method, rating }])
+      .from('smoothies')
+      .insert([{ 
+        title, 
+        description, 
+        image: image || 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800'
+      }])
+      .select()
 
     if (error) {
       console.log(error)
-      setFormError('Please fill in all the fields correctly.')
+      setFormError('Error creating smoothie recipe. Please try again.')
     }
+    
     if (data) {
       console.log(data)
       setFormError(null)
@@ -42,22 +48,29 @@ const Create = () => {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          placeholder="e.g. Berry Blast Smoothie"
         />
 
-        <label htmlFor="method">Method:</label>
+        <label htmlFor="description">Description / Recipe:</label>
         <textarea 
-          id="method"
-          value={method}
-          onChange={(e) => setMethod(e.target.value)}
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows="8"
+          placeholder="Describe your smoothie and list the ingredients..."
         />
 
-        <label htmlFor="rating">Rating:</label>
+        <label htmlFor="image">Image URL:</label>
         <input 
-          type="number"
-          id="rating"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
+          type="url"
+          id="image"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          placeholder="https://example.com/smoothie-image.jpg (optional)"
         />
+        <small style={{display: 'block', marginTop: '-15px', marginBottom: '15px', color: '#666'}}>
+          Leave blank for a default smoothie image
+        </small>
 
         <button>Create Smoothie Recipe</button>
 
