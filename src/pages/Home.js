@@ -19,7 +19,25 @@ const Home = () => {
         return
       }
 
-      setSmoothies(data)
+      // Parse ingredients safely
+      const parsedData = data.map(smoothie => {
+        try {
+          return {
+            ...smoothie,
+            ingredients: typeof smoothie.ingredients === 'string' 
+              ? JSON.parse(smoothie.ingredients) 
+              : smoothie.ingredients || []
+          }
+        } catch (e) {
+          console.error('Error parsing ingredients for smoothie:', smoothie.title, e)
+          return {
+            ...smoothie,
+            ingredients: []
+          }
+        }
+      })
+
+      setSmoothies(parsedData)
       setFetchError(null)
     }
 

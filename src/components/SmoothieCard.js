@@ -92,7 +92,7 @@ const SmoothieCard = ({ smoothie }) => {
               <h3>Description</h3>
               <p>{smoothie.description || 'No description available.'}</p>
               
-          {smoothie.ingredients && Array.isArray(smoothie.ingredients) && smoothie.ingredients.length > 0 && (
+        {smoothie.ingredients && Array.isArray(smoothie.ingredients) && smoothie.ingredients.length > 0 && (
   <>
     <h3>Ingredients</h3>
     <ul className="ingredients-display">
