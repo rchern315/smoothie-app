@@ -92,18 +92,18 @@ const SmoothieCard = ({ smoothie }) => {
               <h3>Description</h3>
               <p>{smoothie.description || 'No description available.'}</p>
               
-              {smoothie.ingredients && smoothie.ingredients.length > 0 && (
-                <>
-                  <h3>Ingredients</h3>
-                  <ul className="ingredients-display">
-                    {smoothie.ingredients.map((ing, index) => (
-                      <li key={index}>
-                        <strong>{ing.amount}</strong> {ing.name}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+             {smoothie.ingredients && smoothie.ingredients.length > 0 && (
+  <>
+    <h3>Ingredients</h3>
+    <ul className="ingredients-display">
+      {smoothie.ingredients.map((ing, index) => (
+        <li key={index}>
+          <strong>{ing.amount}</strong> {ing.name}
+        </li>
+      ))}
+    </ul>
+  </>
+)}
               
               <h3>Directions</h3>
               <p>{smoothie.directions || 'No directions available.'}</p>
