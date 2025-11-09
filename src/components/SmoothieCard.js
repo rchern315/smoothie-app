@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import './SmoothieCard.css'
 
 const SmoothieCard = ({ smoothie }) => {
   const [showModal, setShowModal] = useState(false)
@@ -42,17 +42,19 @@ const SmoothieCard = ({ smoothie }) => {
             <ul className="recipe-details">
               <li className="recipe-details-item time">
                 <i className="ion ion-ios-clock-outline"></i>
-                <span className="value">5</span>
+                <span className="value">{smoothie.time || 5}</span>
                 <span className="title">Minutes</span>
               </li>
               <li className="recipe-details-item ingredients">
                 <i className="ion ion-ios-book-outline"></i>
-                <span className="value">4-6</span>
+                <span className="value">
+                  {smoothie.ingredients?.length || 0}
+                </span>
                 <span className="title">Ingredients</span>
               </li>
               <li className="recipe-details-item servings">
                 <i className="ion ion-ios-person-outline"></i>
-                <span className="value">2</span>
+                <span className="value">{smoothie.servings || 2}</span>
                 <span className="title">Servings</span>
               </li>
             </ul>
@@ -87,8 +89,24 @@ const SmoothieCard = ({ smoothie }) => {
             <h2>{smoothie.title}</h2>
             
             <div className="full-recipe">
-              <h3>Recipe</h3>
+              <h3>Description</h3>
               <p>{smoothie.description || 'No description available.'}</p>
+              
+              {smoothie.ingredients && smoothie.ingredients.length > 0 && (
+                <>
+                  <h3>Ingredients</h3>
+                  <ul className="ingredients-display">
+                    {smoothie.ingredients.map((ing, index) => (
+                      <li key={index}>
+                        <strong>{ing.amount}</strong> {ing.name}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              
+              <h3>Directions</h3>
+              <p>{smoothie.directions || 'No directions available.'}</p>
             </div>
             
             <div className="share-buttons">
