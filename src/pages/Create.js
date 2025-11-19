@@ -78,6 +78,15 @@ const Create = () => {
     try {
       setUploading(true)
       
+      // 👇 ADD THIS - Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (!user) {
+        setFormError('You must be signed in to create recipes.')
+        setUploading(false)
+        return
+      }
+      
       // Handle image upload
       let finalImageUrl = imageUrl || 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800'
       
@@ -85,7 +94,7 @@ const Create = () => {
         finalImageUrl = await uploadImage(imageFile)
       }
 
-      // Insert data
+      // Insert data - 👇 ADD user_id and created_by
       const { data, error } = await supabase
         .from('Smoothies')
         .insert([{ 
@@ -95,7 +104,9 @@ const Create = () => {
           image: finalImageUrl,
           time: time || 5,
           ingredients: validIngredients,
-          servings: servings || 2
+          servings: servings || 2,
+          user_id: user.id,        // 👈 ADD THIS
+          created_by: user.email   // 👈 ADD THIS
         }])
         .select()
 

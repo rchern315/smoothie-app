@@ -1,8 +1,38 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'  // 👈 ADD useEffect
+import supabase from '../config/supabaseClient'  // 👈 ADD THIS IMPORT
+import StarRating from './StarRating'  // 👈 ADD THIS IMPORT
 import './SmoothieCard.css'
+
+// Helper function to safely get ingredients array
+const getIngredientsArray = (ingredients) => {
+  if (!ingredients) return [];
+  
+  // If it's already an array, return it
+  if (Array.isArray(ingredients)) return ingredients;
+  
+  // If it's a string, try to parse it
+  if (typeof ingredients === 'string') {
+    try {
+      const parsed = JSON.parse(ingredients);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  return [];
+}
 
 const SmoothieCard = ({ smoothie }) => {
   const [showModal, setShowModal] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)  // 👈 ADD THIS
+
+  // 👇 ADD THIS useEffect
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setCurrentUser(user)
+    })
+  }, [])
 
   const shareRecipe = (platform) => {
     const url = `${window.location.origin}/smoothie/${smoothie.id}`
@@ -47,9 +77,7 @@ const SmoothieCard = ({ smoothie }) => {
               </li>
               <li className="recipe-details-item ingredients">
                 <i className="ion ion-ios-book-outline"></i>
-                <span className="value">
-                  {smoothie.ingredients?.length || 0}
-                </span>
+                <span className="value">{getIngredientsArray(smoothie.ingredients).length}</span>
                 <span className="title">Ingredients</span>
               </li>
               <li className="recipe-details-item servings">
@@ -88,22 +116,23 @@ const SmoothieCard = ({ smoothie }) => {
             />
             <h2>{smoothie.title}</h2>
             
+            {/* 👇 ADD STAR RATING HERE */}
+            <StarRating smoothieId={smoothie.id} currentUser={currentUser} />
+            
             <div className="full-recipe">
               <h3>Description</h3>
               <p>{smoothie.description || 'No description available.'}</p>
               
-        {smoothie.ingredients && Array.isArray(smoothie.ingredients) && smoothie.ingredients.length > 0 && (
-  <>
-    <h3>Ingredients</h3>
-    <ul className="ingredients-display">
-      {smoothie.ingredients.map((ing, index) => (
-        <li key={index}>
-          <strong>{ing.amount}</strong> {ing.name}
-        </li>
-      ))}
-    </ul>
-  </>
-)}
+              {smoothie.ingredients && Array.isArray(smoothie.ingredients) && smoothie.ingredients.length > 0 && (
+                <>
+                  <h3>Ingredients</h3>
+                  <ul className="ingredients-display">
+                    {getIngredientsArray(smoothie.ingredients).map((ing, index) => (
+                      <li key={index}>{ing.amount} {ing.name}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
               
               <h3>Directions</h3>
               <p>{smoothie.directions || 'No directions available.'}</p>
